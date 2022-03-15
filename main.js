@@ -5,6 +5,7 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 App.mpType = 'app'
 
+
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 // 全局配置云数据库
