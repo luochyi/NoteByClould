@@ -1,11 +1,12 @@
 <template>
 	<view class="bg">
 		<view class="content">
-			<u-input placeholder='password' v-model="password"></u-input>
-			<u-button color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))" @click="getUser()">登录	
+			<u-input placeholder='username' color='#fff' v-model="username"></u-input>
+			<u-input placeholder='password' color='#fff' v-model="password" type='password'></u-input>
+			<u-button color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))" @click="getUser()">登录
 			</u-button>
+			<u-toast ref="uToast"></u-toast>
 		</view>
-		<u-notify ref="uNotify" message="Hi uView"></u-notify>
 	</view>
 </template>
 
@@ -13,51 +14,74 @@
 	export default {
 		data() {
 			return {
+				username: '',
 				password: ''
 			};
 		},
 		methods: {
 			getUser() {
-				if (this.password !== 'bb') {
-					this.$refs.uNotify.show({
-						top: 30,
-						type: 'warning',
-						color: '#fff',
-						bgColor: '#CC0033',
-						message: '密码错误',
-						duration: 1000 * 3,
-						fontSize: 20,
+				if (this.username === '') {
+					this.$refs.uToast.show({
+						type: 'error',
+						icon: false,
+						message: '用户名为空',
 					})
 					return
 				}
-				uni.getUserProfile({
-					desc: 'getInfo',
-					success: (res) => {
-						uni.setStorageSync('userInfo', res.userInfo)
-						uni.navigateTo({
-							url:'../index/index'
+
+				if (this.password === '') {
+					this.$refs.uToast.show({
+						type: 'error',
+						icon: false,
+						message: '密码为空',
+					})
+					return
+				}
+
+				this.$db.collection("user").where({
+					username: this.username
+				}).get().then(res => {
+					let user = res.data;
+					console.log(user.length);
+					if (res.data.length === 0) {
+						this.$refs.uToast.show({
+							type: 'error',
+							icon: false,
+							message: '用户不存在',
 						})
-					},
-					fail: () => {
-						console.log("未授权");
+						return
+					} else if (user[0].password !== this.password) {
+						this.$refs.uToast.show({
+							type: 'error',
+							icon: false,
+							message: '密码错误',
+						})
+						return
+					} else {
+						uni.switchTab({
+							url: '/pages/index/index',
+							success(res) {},
+							fail(err) {
+								// errMsg: "navigateTo:fail page "pages/index/pages/test/test" is not found"
+							}
+						})
 					}
 				})
 			}
 		}
-
 	}
 </script>
 
 <style lang="scss">
-.bg{
-	height: 100vh;
-	width: 100%;
-	background: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fi-1.33app.net%2F2019%2F9%2F12%2FKDYwMHgp%2F2050eb38-6614-48dc-80e6-50002d196cc0.jpg%3Fwidth%3D1080%26height%3D1920&refer=http%3A%2F%2Fi-1.33app.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1649916356&t=610b6ec817140d136e569962decb3bcd);
-	background-size: contain;
-	
-}
-.content{
-		padding-top: 40%;
+	.bg {
+		height: 100vh;
+		width: 100%;
+		background: url(https://636c-cloud1-3gkkta0j361cad06-1310095590.tcb.qcloud.la/img/1647681261777-9830?sign=d9441e205651913c04d395570801bd83&t=1647681294);
+		background-size: contain;
+	}
+
+	.content {
+		padding-top: 90%;
 		width: 100%;
 	}
 </style>

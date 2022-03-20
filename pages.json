@@ -3,13 +3,7 @@
 		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"enablePullDownRefresh": true
-			}
-		},
+		
 		{
 			"path": "pages/home/home",
 			"style": {
@@ -17,11 +11,27 @@
 			}
 		},
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "notebooks",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/add/add",
 			"style": {
-				"navigationBarTitleText": "发布"
+				"navigationBarTitleText": "writedown"
 			}
 		}
+        ,{
+            "path" : "pages/get/get",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "授权",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar":{
 		"color":"#000000",
@@ -29,13 +39,13 @@
 		"list":[
 			{
 				"pagePath":"pages/index/index",
-				"text":"首页",
+				"text":"备忘录",
 				"iconPath":"static/home.png",
 				"selectedIconPath":"static/home.png"
 			},
 			{
 				"pagePath":"pages/add/add",
-				"text":"发布",
+				"text":"记录",
 				"iconPath":"static/upload.png",
 				"selectedIconPath":"static/upload.png"
 			}
